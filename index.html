@@ -12,7 +12,10 @@
     --tenue: #5b6875;
     --caja: #ffffff;
     --borde: #dde3ea;
-    --guia: #b9c4d0;
+    --campo: #ffffff;
+    --acento: #1f5fbf;
+    --acento-texto: #ffffff;
+    --error: #b3261e;
   }
   @media (prefers-color-scheme: dark) {
     :root {
@@ -21,7 +24,10 @@
       --tenue: #9aa9b8;
       --caja: #1b232e;
       --borde: #2b3644;
-      --guia: #3d4b5c;
+      --campo: #141b24;
+      --acento: #5b9bf5;
+      --acento-texto: #0d1219;
+      --error: #f2837b;
     }
   }
 
@@ -36,10 +42,7 @@
     padding: 24px 18px 56px;
   }
 
-  .hoja {
-    max-width: 620px;
-    margin: 0 auto;
-  }
+  .hoja { max-width: 620px; margin: 0 auto; }
 
   header {
     padding: 24px 0 20px;
@@ -60,46 +63,92 @@
     max-width: 46ch;
   }
 
-  .pendiente {
-    margin-top: 28px;
-    background: var(--caja);
-    border: 2px dashed var(--guia);
-    border-radius: 14px;
-    padding: clamp(24px, 7vw, 40px) clamp(18px, 5vw, 32px);
-    text-align: center;
-  }
-
-  .etiqueta {
-    display: inline-block;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.09em;
-    text-transform: uppercase;
-    color: var(--tenue);
-    border: 1px solid var(--borde);
-    border-radius: 999px;
-    padding: 4px 12px;
-    margin-bottom: 14px;
-  }
-
-  .pendiente h2 {
+  h2 {
     font-size: clamp(18px, 4.8vw, 21px);
-    margin: 0 0 8px;
+    margin: 32px 0 14px;
   }
 
-  .pendiente p {
-    margin: 0;
-    color: var(--tenue);
-    font-size: 15px;
-    max-width: 40ch;
-    margin-inline: auto;
+  /* ---- formulario ---- */
+
+  form {
+    background: var(--caja);
+    border: 1px solid var(--borde);
+    border-radius: 14px;
+    padding: clamp(18px, 5vw, 26px);
   }
 
-  footer {
-    margin-top: 32px;
+  label {
+    display: block;
     font-size: 14px;
-    color: var(--tenue);
+    font-weight: 600;
+    margin-bottom: 6px;
   }
+
+  .opcional { font-weight: 400; color: var(--tenue); }
+
+  input, textarea {
+    width: 100%;
+    font: inherit;
+    font-size: 16px; /* 16px evita que el celular haga zoom al enfocar */
+    color: var(--texto);
+    background: var(--campo);
+    border: 1px solid var(--borde);
+    border-radius: 9px;
+    padding: 11px 13px;
+    margin-bottom: 18px;
+  }
+
+  textarea { min-height: 130px; resize: vertical; }
+
+  input:focus-visible, textarea:focus-visible, button:focus-visible {
+    outline: 2px solid var(--acento);
+    outline-offset: 2px;
+  }
+
+  button {
+    width: 100%;
+    font: inherit;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--acento-texto);
+    background: var(--acento);
+    border: 0;
+    border-radius: 9px;
+    padding: 13px 20px;
+    cursor: pointer;
+    min-height: 48px; /* cómodo para el pulgar */
+  }
+
+  button:disabled { opacity: .55; cursor: default; }
+
+  .aviso {
+    margin: 14px 0 0;
+    font-size: 15px;
+    min-height: 1.5em;
+  }
+  .aviso.malo { color: var(--error); }
+
+  /* ---- lista ---- */
+
+  ul { list-style: none; margin: 0; padding: 0; }
+
+  li {
+    background: var(--caja);
+    border: 1px solid var(--borde);
+    border-radius: 14px;
+    padding: clamp(16px, 4.5vw, 22px);
+    margin-bottom: 12px;
+  }
+
+  .mensaje {
+    margin: 0 0 10px;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+
+  .firma { margin: 0; font-size: 14px; color: var(--tenue); }
+
+  .vacio { color: var(--tenue); margin: 0; }
 </style>
 </head>
 <body>
@@ -111,19 +160,133 @@
         una mejora, con su nombre o sin él, y que quede registrada.</p>
     </header>
 
-    <!-- Aquí va el formulario. Siguiente paso: los campos nombre y mensaje,
-         guardando en la tabla `registros` de Supabase. -->
-    <section class="pendiente" aria-labelledby="titulo-pendiente">
-      <span class="etiqueta">Siguiente paso</span>
-      <h2 id="titulo-pendiente">Aquí va el formulario</h2>
-      <p>Todavía no está puesto. En este espacio irán los campos para escribir
-         y el botón para enviar.</p>
-    </section>
+    <h2>Deja tu sugerencia</h2>
+    <form id="forma">
+      <label for="nombre">Tu nombre <span class="opcional">— opcional</span></label>
+      <input id="nombre" name="nombre" type="text" maxlength="80"
+             autocomplete="name" placeholder="Puedes dejarlo en blanco">
 
-    <footer>
-      Todavía no hay sugerencias que mostrar.
-    </footer>
+      <label for="mensaje">Tu sugerencia</label>
+      <textarea id="mensaje" name="mensaje" maxlength="2000" required
+                placeholder="¿Qué cambiarías?"></textarea>
+
+      <button type="submit" id="enviar">Enviar</button>
+      <p class="aviso" id="aviso" role="status" aria-live="polite"></p>
+    </form>
+
+    <h2>Lo que se ha dejado</h2>
+    <div id="lista"><p class="vacio">Cargando…</p></div>
 
   </div>
+
+<script>
+// Esta llave es la publicable: está hecha para andar a la vista.
+const SUPABASE_URL = "https://weiyenrtizkilldcnkeg.supabase.co";
+const SUPABASE_KEY = "sb_publishable_CgSxUfOmp6Z24ypD0UyW2w_vnlebCfY";
+
+const API = SUPABASE_URL + "/rest/v1/registros";
+const cabeceras = { apikey: SUPABASE_KEY, Authorization: "Bearer " + SUPABASE_KEY };
+
+const forma   = document.getElementById("forma");
+const aviso   = document.getElementById("aviso");
+const enviar  = document.getElementById("enviar");
+const lista   = document.getElementById("lista");
+
+function decir(texto, malo) {
+  aviso.textContent = texto;
+  aviso.classList.toggle("malo", Boolean(malo));
+}
+
+async function traer() {
+  try {
+    const r = await fetch(
+      API + "?select=nombre,mensaje,created_at&order=created_at.desc&limit=100",
+      { headers: cabeceras }
+    );
+    if (!r.ok) throw new Error(await r.text());
+    pintar(await r.json());
+  } catch (e) {
+    lista.innerHTML = "";
+    const p = document.createElement("p");
+    p.className = "vacio";
+    p.textContent = "No se pudieron cargar las sugerencias. Recarga la página.";
+    lista.appendChild(p);
+    console.error(e);
+  }
+}
+
+function pintar(filas) {
+  lista.innerHTML = "";
+
+  if (!filas.length) {
+    const p = document.createElement("p");
+    p.className = "vacio";
+    p.textContent = "Todavía no hay sugerencias. La tuya sería la primera.";
+    lista.appendChild(p);
+    return;
+  }
+
+  const ul = document.createElement("ul");
+  for (const fila of filas) {
+    const li = document.createElement("li");
+
+    const msg = document.createElement("p");
+    msg.className = "mensaje";
+    msg.textContent = fila.mensaje || "";
+    li.appendChild(msg);
+
+    const firma = document.createElement("p");
+    firma.className = "firma";
+    const quien = (fila.nombre || "").trim() || "Anónimo";
+    firma.textContent = quien + " · " + fecha(fila.created_at);
+    li.appendChild(firma);
+
+    ul.appendChild(li);
+  }
+  lista.appendChild(ul);
+}
+
+function fecha(iso) {
+  if (!iso) return "";
+  return new Date(iso).toLocaleDateString("es-MX", {
+    day: "numeric", month: "long", year: "numeric"
+  });
+}
+
+forma.addEventListener("submit", async (ev) => {
+  ev.preventDefault();
+
+  const nombre  = document.getElementById("nombre").value.trim();
+  const mensaje = document.getElementById("mensaje").value.trim();
+
+  if (!mensaje) { decir("Escribe tu sugerencia antes de enviar.", true); return; }
+
+  enviar.disabled = true;
+  decir("Enviando…");
+
+  try {
+    const r = await fetch(API, {
+      method: "POST",
+      headers: Object.assign({}, cabeceras, {
+        "Content-Type": "application/json",
+        Prefer: "return=minimal"
+      }),
+      body: JSON.stringify({ nombre: nombre || null, mensaje })
+    });
+    if (!r.ok) throw new Error(await r.text());
+
+    forma.reset();
+    decir("Gracias. Tu sugerencia quedó registrada.");
+    traer();
+  } catch (e) {
+    decir("No se pudo enviar. Inténtalo otra vez.", true);
+    console.error(e);
+  } finally {
+    enviar.disabled = false;
+  }
+});
+
+traer();
+</script>
 </body>
 </html>
