@@ -3,46 +3,127 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Todavía no hay nada aquí</title>
+<title>Buzón de sugerencias</title>
 <style>
-  :root { color-scheme: light dark; }
-  body {
-    margin: 0; min-height: 100vh;
-    display: grid; place-items: center;
-    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-    background: #f4f6f8; color: #1a2027;
-    padding: 24px;
+  :root {
+    color-scheme: light dark;
+    --fondo: #f4f6f8;
+    --texto: #1a2027;
+    --tenue: #5b6875;
+    --caja: #ffffff;
+    --borde: #dde3ea;
+    --guia: #b9c4d0;
   }
   @media (prefers-color-scheme: dark) {
-    body { background: #121820; color: #e8eef5; }
-    .caja { background: #1b232e !important; border-color: #2b3644 !important; }
-    code { background: #253040 !important; }
+    :root {
+      --fondo: #121820;
+      --texto: #e8eef5;
+      --tenue: #9aa9b8;
+      --caja: #1b232e;
+      --borde: #2b3644;
+      --guia: #3d4b5c;
+    }
   }
-  .caja {
-    background: #fff; border: 1px solid #dde3ea; border-radius: 14px;
-    padding: 34px; max-width: 480px; text-align: center;
-    box-shadow: 0 10px 30px -18px rgba(0,0,0,.3);
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--fondo);
+    color: var(--texto);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    line-height: 1.55;
+    padding: 24px 18px 56px;
   }
-  h1 { font-size: 22px; margin: 0 0 10px; }
-  p { margin: 0 0 14px; line-height: 1.55; }
-  p:last-child { margin-bottom: 0; }
-  code {
-    background: #eef2f6; padding: 2px 6px; border-radius: 4px;
-    font-family: ui-monospace, "Consolas", monospace; font-size: .9em;
+
+  .hoja {
+    max-width: 620px;
+    margin: 0 auto;
   }
-  .chica { font-size: 14px; opacity: .75; }
+
+  header {
+    padding: 24px 0 20px;
+    border-bottom: 1px solid var(--borde);
+  }
+
+  h1 {
+    font-size: clamp(26px, 7vw, 38px);
+    line-height: 1.15;
+    margin: 0 0 10px;
+    letter-spacing: -0.02em;
+  }
+
+  .para-que {
+    margin: 0;
+    font-size: clamp(16px, 4.2vw, 18px);
+    color: var(--tenue);
+    max-width: 46ch;
+  }
+
+  .pendiente {
+    margin-top: 28px;
+    background: var(--caja);
+    border: 2px dashed var(--guia);
+    border-radius: 14px;
+    padding: clamp(24px, 7vw, 40px) clamp(18px, 5vw, 32px);
+    text-align: center;
+  }
+
+  .etiqueta {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--tenue);
+    border: 1px solid var(--borde);
+    border-radius: 999px;
+    padding: 4px 12px;
+    margin-bottom: 14px;
+  }
+
+  .pendiente h2 {
+    font-size: clamp(18px, 4.8vw, 21px);
+    margin: 0 0 8px;
+  }
+
+  .pendiente p {
+    margin: 0;
+    color: var(--tenue);
+    font-size: 15px;
+    max-width: 40ch;
+    margin-inline: auto;
+  }
+
+  footer {
+    margin-top: 32px;
+    font-size: 14px;
+    color: var(--tenue);
+  }
 </style>
 </head>
 <body>
-  <div class="caja">
-    <h1>Todavía no hay nada aquí</h1>
-    <p>Y eso es exactamente lo que tiene que decir hoy.</p>
-    <p>Si estás leyendo esto en tu propia liga, quiere decir que
-       <strong>tu repositorio, tu publicación y tu página ya funcionan</strong>.
-       Es todo lo que necesitabas antes de la sesión.</p>
-    <p class="chica">El martes le vas a pedir a Claude que reemplace esta página
-       por la tuya. Este archivo se llama <code>index.html</code> y es el único
-       que hay que cambiar.</p>
+  <div class="hoja">
+
+    <header>
+      <h1>Buzón de sugerencias</h1>
+      <p class="para-que">Para que cualquiera del área deje una idea, una queja o
+        una mejora, con su nombre o sin él, y que quede registrada.</p>
+    </header>
+
+    <!-- Aquí va el formulario. Siguiente paso: los campos nombre y mensaje,
+         guardando en la tabla `registros` de Supabase. -->
+    <section class="pendiente" aria-labelledby="titulo-pendiente">
+      <span class="etiqueta">Siguiente paso</span>
+      <h2 id="titulo-pendiente">Aquí va el formulario</h2>
+      <p>Todavía no está puesto. En este espacio irán los campos para escribir
+         y el botón para enviar.</p>
+    </section>
+
+    <footer>
+      Todavía no hay sugerencias que mostrar.
+    </footer>
+
   </div>
 </body>
 </html>
